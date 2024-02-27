@@ -8,11 +8,12 @@ const nodemailer = require("nodemailer");
 const SECRET = process.env.APP_SECRET;
 var RefreshTokens = [];
 
-var transporter = nodemailer.createTransport({
-	service: "gmail",
+var transport = nodemailer.createTransport({
+	host: "sandbox.smtp.mailtrap.io",
+	port: 2525,
 	auth: {
-		user: process.env.APP_USER,
-		pass: process.env.APP_PASSWORD,
+		user: "3a831bd911cb6e",
+		pass: "0eab54ec92b4c6",
 	},
 });
 
@@ -76,24 +77,24 @@ register = async (req, res) => {
 			await coach.save();
 		}
 
-		transporter.sendMail(
+		transport.sendMail(
 			{
 				to: user.email,
-				subject: "Welcome " + user.name,
+				subject: "Welcome " + user.fullname,
 				text: "bonjour mr ",
 				html: `<!DOCTYPE html>
-        <html>
-        <head>
-          <meta charset="utf-8">
-          <meta http-equiv="x-ua-compatible" content="ie=edge">
-          <title>Welcome Email</title>
-        </head>
-        <body>
-          <h2>Hello ${user.fullname}! </h2>
-          <p>We're glad to have you on board at ${user.email}. </p>
-          <a href="">thank you for joining our platform</a>
-        </body>
-        </html>`,
+						<html>
+						<head>
+						<meta charset="utf-8">
+						<meta http-equiv="x-ua-compatible" content="ie=edge">
+						<title>Welcome Email</title>
+						</head>
+						<body>
+						<h2>Hello ${user.fullname}! </h2>
+						<p>We're glad to have you on board at ${user.email}. </p>
+						<a href="">thank you for joining our platform</a>
+						</body>
+						</html>`,
 			},
 			function (err, info) {
 				if (err) {
@@ -231,6 +232,7 @@ profile = async (req, res) => {
 		res.status(404).json({ message: error.message });
 	}
 };
+
 module.exports = {
 	registerAdmin,
 	register,
