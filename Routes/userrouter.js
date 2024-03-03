@@ -5,6 +5,8 @@ const check_auth = require("../Middlewares/check_authentication");
 const passport = require("passport");
 require("../Middlewares/passport_authentification").passport;
 
+router.get("/getCoachs", usercontroller.getCoachs);
+
 router.get("/getAllUsers", usercontroller.getAllUsers);
 
 /*  router.get(

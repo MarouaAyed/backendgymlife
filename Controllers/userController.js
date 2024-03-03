@@ -1,5 +1,14 @@
 const User = require("../Models/User");
 
+getCoachs = async (req, res) => {
+	try {
+		const listecoachs = await User.find({role: "coach"});
+		res.status(200).json(listecoachs);
+	} catch (error) {
+		res.status(406).json({ status: 406, message: error.message });
+	}
+};
+
 getAllUsers = async (req, res) => {
 	try {
 		const listeusers = await User.find({});
@@ -41,6 +50,7 @@ deleteUser = async (req, res) => {
 	}
 };
 module.exports = {
+	getCoachs,
 	getAllUsers,
 	getAdherentsCoach,
 };
