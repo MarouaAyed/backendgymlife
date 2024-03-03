@@ -13,6 +13,7 @@ const authrouter = require("./Routes/authrouter");
 const adminrouter = require("./Routes/adminrouter");
 const userrouter = require("./Routes/userrouter");
 const planrouter = require("./Routes/planrouter");
+const regimerouter = require("./Routes/regimerouter");
 
 
 // Initialize the application
@@ -30,6 +31,7 @@ router.use("/", authrouter);
 router.use("/admin", adminrouter);
 router.use("/user", userrouter);
 router.use("/plan", planrouter);
+router.use("/regime", regimerouter);
 
 // Start Listenting for the server on PORT
 app.listen(PORT, async () => {

@@ -1,10 +1,9 @@
 const mongoose = require("mongoose");
 
 const schemaTime = new mongoose.Schema({
-	name: { // break 
+	name: { // break fast
 		type: String,
 		required: true,
-		unique: true,
 	},
 	description: {
 		type: String,
@@ -16,12 +15,10 @@ const schemaDay = new mongoose.Schema({
 	name: {
 		type: String,
 		required: true,
-		unique: true,
 	},
-	time: [schemaTime],
+	times: [schemaTime],
 	date: {
 		type: String,
-		required: true,
 	},
 });
 
@@ -30,7 +27,7 @@ const schemaRegime = new mongoose.Schema(
 		start_date: {
 			type: String,
 			required: true,
-			unique: true,
+			/* unique: true, */
 		},
 		end_date: {
 			type: String,

@@ -2,6 +2,7 @@ const User = require("../Models/User");
 const Plan = require("../Models/Plan");
 
 const bcrypt = require("bcrypt");
+const generatePassword = require("generate-password");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 
@@ -44,7 +45,21 @@ register = async (req, res) => {
 	try {
 		req.body["picture"] = !req.file ? null : req.file.filename;
 		//console.log(req);
-		const password = bcrypt.hashSync("123456789", 10);
+		// Générer un mot de passe aléatoire avec le package generate-password
+		const randomPassword = generatePassword.generate({
+			length: 12, // Choisir la longueur souhaitée
+			numbers: true,
+			symbols: true,
+			uppercase: true,
+			excludeSimilarCharacters: true,
+		});
+
+		// Hacher le mot de passe avec bcrypt
+		const password = bcrypt.hashSync(randomPassword, 10);
+
+		console.log("Mot de passe aléatoire:", randomPassword);
+		console.log("Mot de passe haché:", password);
+
 		const coachId = req.body.coach || null;
 
 		const newuser = new User({
@@ -92,6 +107,7 @@ register = async (req, res) => {
 						<body>
 						<h2>Hello ${user.fullname}! </h2>
 						<p>We're glad to have you on board at ${user.email}. </p>
+						<p>Your password is ${randomPassword} , Modify it for enhanced security. </p>
 						<a href="">thank you for joining our platform</a>
 						</body>
 						</html>`,
@@ -223,13 +239,36 @@ refreshToken = async (req, res) => {
 };
 forgetPassword = async (req, res) => {};
 resetPassword = async (req, res) => {};
-changePassword = async (req, res) => {};
-profile = async (req, res) => {
+
+changePassword = async (req, res) => {
 	try {
-		const user = req.user;
-		res.status(200).json({ user: user });
+		const auth_user = req.user;
+		//console.log("auth_user ", auth_user);
+		const user = await User.findOne({ _id: auth_user._id });
+		const passwordCompare = bcrypt.compareSync(
+			req.body.oldPasswordValue,
+			user.password
+		);
+		if (passwordCompare) {
+			const password = bcrypt.hashSync(req.body.newPasswordValue, 10);
+			user.password = password;
+			user.save();
+			res.status(200).json({
+				status: 200,
+				message: "Password changed successufuly.",
+			});
+		} else {
+			res.status(403).json({
+				status: 403,
+				message: "Password not found.",
+			});
+		}
 	} catch (error) {
-		res.status(404).json({ message: error.message });
+		console.log("error catch ", err.message);
+		res.status(406).json({
+			status: 406,
+			message: err.message,
+		});
 	}
 };
 
@@ -241,5 +280,4 @@ module.exports = {
 	forgetPassword,
 	resetPassword,
 	changePassword,
-	profile,
 };
