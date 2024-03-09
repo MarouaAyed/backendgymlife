@@ -6,7 +6,6 @@ const passport = require("passport");
 require("../Middlewares/passport_authentification").passport;
 
 router.get("/getCoachs", usercontroller.getCoachs);
-
 router.get("/getAllUsers", usercontroller.getAllUsers);
 
 /*  router.get(
@@ -14,7 +13,11 @@ router.get("/getAllUsers", usercontroller.getAllUsers);
 	passport.authenticate("jwt", { session: false }),
 	usercontroller.getAdherentsCoach
 );  */
-
 router.get("/getAdherentsCoach", check_auth, usercontroller.getAdherentsCoach);
+
+router.post("/update/:id", check_auth, usercontroller.updateUser);
+router.post("/updateFullname", check_auth, usercontroller.updateFullname);
+
+router.post("/enableDisable/:id", check_auth, usercontroller.enableDisable);
 
 module.exports = router;

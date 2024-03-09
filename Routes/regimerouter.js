@@ -6,6 +6,8 @@ router.post("/create", regimecontroller.createRegime);
 
 router.post("/getRegimeAdherent/:id", regimecontroller.getRegimeAdherent);
 
-router.get("/getRegime",check_auth, regimecontroller.getRegime);
+router.get("/getRegime", check_auth, regimecontroller.getRegime);
+
+router.post("/disableRegime/:id", regimecontroller.disableRegime);
 
 module.exports = router;

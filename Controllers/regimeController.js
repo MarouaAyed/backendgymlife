@@ -1,5 +1,4 @@
 const Regime = require("../Models/Regime");
-const User = require("../Models/User");
 
 createRegime = async (req, res) => {
 	try {
@@ -64,8 +63,25 @@ getRegime = async (req, res) => {
 	}
 };
 
+disableRegime = async (req, res) => {
+	try {
+		const regime = await Regime.findById({ _id: req.params.id });
+		regime.state = false;
+
+		await regime.save();
+		console.log("regime after save ", regime);
+
+		res.status(200).json({
+			message: "disable regime",
+		});
+	} catch (error) {
+		res.status(406).json({ message: error.message });
+	}
+};
+
 module.exports = {
 	createRegime,
 	getRegimeAdherent,
 	getRegime,
+	disableRegime,
 };
